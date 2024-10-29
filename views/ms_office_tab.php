@@ -1,3 +1,14 @@
+<div id="lister" style="font-size: large; float: right;">
+    <a href="/show/listing/ms_office/ms_office" title="List">
+        <i class="btn btn-default tab-btn fa fa-list"></i>
+    </a>
+</div>
+<div id="report_btn" style="font-size: large; float: right;">
+    <a href="/show/report/ms_office/ms_office_report" title="Report">
+        <i class="btn btn-default tab-btn fa fa-th"></i>
+    </a>
+</div>
+
 <div id="ms_office-tab"></div>
 
 <script>
