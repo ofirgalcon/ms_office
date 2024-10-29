@@ -293,16 +293,21 @@ def o365_license_detect():
 
             userpath4 = False
             if os.path.exists(user.replace("NFSHomeDirectory: ", "")+'/Library/Group Containers/UBF8T346G9.Office/Licenses/5/'):
-                for licenseFile in os.listdir(user.replace("NFSHomeDirectory: ", "")+'/Library/Group Containers/UBF8T346G9.Office/Licenses/5/'):
-                    try:
-                        license_file_contents = open(user.replace("NFSHomeDirectory: ", "")+'/Library/Group Containers/UBF8T346G9.Office/Licenses/5/'+licenseFile, "r").read()
-                    except:
-                        license_file_contents = open(user.replace("NFSHomeDirectory: ", "")+'/Library/Group Containers/UBF8T346G9.Office/Licenses/5/'+licenseFile, "rb").read().decode("utf-8", errors="ignore")
+                # This directory is now protected by TCC on macOS 15+
+                try:
+                    for licenseFile in os.listdir(user.replace("NFSHomeDirectory: ", "")+'/Library/Group Containers/UBF8T346G9.Office/Licenses/5/'):
+                        try:
+                            license_file_contents = open(user.replace("NFSHomeDirectory: ", "")+'/Library/Group Containers/UBF8T346G9.Office/Licenses/5/'+licenseFile, "r").read()
+                        except:
+                            license_file_contents = open(user.replace("NFSHomeDirectory: ", "")+'/Library/Group Containers/UBF8T346G9.Office/Licenses/5/'+licenseFile, "rb").read().decode("utf-8", errors="ignore")
 
-                    # This file is weird, we have to check for {
-                    if '{' in license_file_contents:
-                        userpath4 = True
-                        break
+                        # This file is weird, we have to check for {
+                        if '{' in license_file_contents:
+                            userpath4 = True
+                            break
+                except:
+                    # Assume yes to having an O365 license if directory exists 
+                    userpath4 = True
 
             # Check if there are any valid licenses detected
             if (os.path.exists(userpath1)) or (os.path.exists(userpath2)) or (os.path.exists(userpath3)) or userpath4:
