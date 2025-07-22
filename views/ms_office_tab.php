@@ -22,7 +22,10 @@ $(document).on('appReady', function(){
             var rows_company_portal = ''
             var rows_defender = ''
             var rows_yammer = ''
+            var rows_copilot = ''
             var rows_reg_apps = '<tr><td>'+i18n.t('ms_office.no_registeredapplications')+'</td><td></td><td></td><td></td><td></td><td></td></tr>'
+            var rdp_win_app = "win"
+
             for (var prop in d){
                 // Skip skipThese
                 if(skipThese.indexOf(prop) == -1){
@@ -53,49 +56,49 @@ $(document).on('appReady', function(){
                         rows = rows + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "shared_o365_license" || prop == "o365_detected") && d[prop] == 1){
                         rows = rows + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_mau
                     } else if((prop == "startdaemononapplaunch" || prop == "autoupdate_mas" || prop == "msupdate_check_enabled") && d[prop] == 0){
                         rows_mau = rows_mau + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "startdaemononapplaunch" || prop == "autoupdate_mas" || prop == "msupdate_check_enabled") && d[prop] == 1){
                         rows_mau = rows_mau + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_excel
                     } else if((prop == "excel_mas") && d[prop] == 0){
                         rows_excel = rows_excel + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "excel_mas") && d[prop] == 1){
                         rows_excel = rows_excel + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_word
                     } else if((prop == "word_mas") && d[prop] == 0){
                         rows_word = rows_word + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "word_mas") && d[prop] == 1){
                         rows_word = rows_word + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_ppt
                     } else if((prop == "powerpoint_mas") && d[prop] == 0){
                         rows_ppt = rows_ppt + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "powerpoint_mas") && d[prop] == 1){
                         rows_ppt = rows_ppt + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_outlook
                     } else if((prop == "outlook_mas") && d[prop] == 0){
                         rows_outlook = rows_outlook + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "outlook_mas") && d[prop] == 1){
                         rows_outlook = rows_outlook + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_onenote
                     } else if((prop == "onenote_mas") && d[prop] == 0){
                         rows_onenote = rows_onenote + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "onenote_mas") && d[prop] == 1){
                         rows_onenote = rows_onenote + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_onedrive
                     } else if((prop == "onedrive_mas") && d[prop] == 0){
                         rows_onedrive = rows_onedrive + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "onedrive_mas") && d[prop] == 1){
                         rows_onedrive = rows_onedrive + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
+
                     // Format yes/no rows_reportdestkop
                     } else if((prop == "remote_desktop_mas") && d[prop] == 0){
                         rows_reportdestkop = rows_reportdestkop + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
@@ -113,10 +116,13 @@ $(document).on('appReady', function(){
                         rows_teams = rows_teams + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('no')+'</td></tr>';
                     } else if((prop == "teams_mas") && d[prop] == 1){
                         rows_teams = rows_teams + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+i18n.t('yes')+'</td></tr>';
-                        
-                        
+
+                    // Format O365 user accounts
+                    } else if((prop == "o365_user_accounts") && d[prop] !== ""){
+                        rows = rows + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+d[prop].replaceAll(', ', '<br>')+'</td></tr>';
+
                     // Else if, AutoUpdate
-                    } else if(prop.indexOf('autoupdate_') > -1 || prop == 'channelname'  || prop == 'howtocheck'  || prop == 'lastcheckforupdates'  || prop == 'manifestserver'  || prop == 'updatecache' ){
+                    } else if(prop.indexOf('autoupdate_') > -1 || prop == 'channelname' || prop == 'howtocheck' || prop == 'lastcheckforupdates' || prop == 'manifestserver' || prop == 'updatecache'){
                         // Format last check date, if timestamp
                         if (prop == 'lastcheckforupdates' && ! isNaN(d[prop]) && d[prop] !== ""){
                             var date = new Date(d[prop] * 1000);
@@ -124,7 +130,7 @@ $(document).on('appReady', function(){
                         } else {
                             rows_mau = rows_mau + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
                         }
-                        
+
                     // Else if, Excel
                     } else if(prop.indexOf('excel_') > -1){
                         rows_excel = rows_excel + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
@@ -142,6 +148,10 @@ $(document).on('appReady', function(){
                         rows_ppt = rows_ppt + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
                     // Else if, Remote Desktop
                     } else if(prop.indexOf('remote_desktop_') > -1){
+                        // Set variable for MS RDP or Win App
+                        if (prop == "remote_desktop_app_version" && d[prop] < "11"){
+                            rdp_win_app = "rdp"
+                        }
                         rows_reportdestkop = rows_reportdestkop + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
                     // Else if, Skype for Business
                     } else if(prop.indexOf('skype_for_business_') > -1){
@@ -164,7 +174,10 @@ $(document).on('appReady', function(){
                     // Else if, Yammer
                     } else if(prop.indexOf('yammer_app_') > -1){
                         rows_yammer = rows_yammer + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
-                    
+                    // Else if, Copilot
+                    } else if(prop.indexOf('copilot_app_') > -1){
+                        rows_copilot = rows_copilot + '<tr><th>'+i18n.t('ms_office.'+prop)+'</th><td>'+d[prop]+'</td></tr>';
+
                     // Else if build out the registered applications table
                     } else if(prop == "registeredapplications"){
                         var reg_apps_data = JSON.parse(d['registeredapplications']);
@@ -187,18 +200,18 @@ $(document).on('appReady', function(){
                     }
                 }
             }
-        
+
             $('#ms_office-tab')
                 .append($('<h2>')
                     .append(i18n.t('ms_office.ms_office')))
                 .append($('<h4>')
                     .append($('<i>')))
-                .append($('<div style="max-width:400px;">')
+                .append($('<div style="max-width:550px;">')
                     .append($('<table>')
                         .addClass('table table-striped table-condensed')
                         .append($('<tbody>')
                             .append(rows))))
-            
+
             // Registered apps block
             if (typeof d.registeredapplications !== "string"){
                 $('#ms_office-tab')
@@ -237,7 +250,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_mau))))
             }
-            
+
             // Excel block
             if (rows_excel !== ''){
                 $('#ms_office-tab')
@@ -251,7 +264,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_excel))))
             }
-            
+
             // PowerPoint block
             if (rows_ppt !== ''){
                 $('#ms_office-tab')
@@ -265,7 +278,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_ppt))))
             }
-                        
+
             // Outlook block
             if (rows_outlook !== ''){
                 $('#ms_office-tab')
@@ -279,7 +292,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_outlook))))
             }
-                        
+
             // OneNote block
             if (rows_onenote !== ''){
                 $('#ms_office-tab')
@@ -307,7 +320,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_word))))
             }
-            
+
             // OneDrive block
             if (rows_onedrive !== ''){
                 $('#ms_office-tab')
@@ -321,9 +334,9 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_onedrive))))
             }
-            
+
             // MS RDP block
-            if (rows_reportdestkop !== ''){
+            if (rows_reportdestkop !== '' && rdp_win_app == "rdp"){
                 $('#ms_office-tab')
                     .append($('<h4>')
                         .append($('<i>')
@@ -335,7 +348,21 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_reportdestkop))))
             }
-            
+
+            // Windows App (eww) block
+            if (rows_reportdestkop !== '' && rdp_win_app == "win"){
+                $('#ms_office-tab')
+                    .append($('<h4>')
+                        .append($('<i>')
+                            .addClass('fa fa-windows'))
+                        .append(' Windows App'))
+                    .append($('<div style="max-width:350px;">')
+                        .append($('<table>')
+                            .addClass('table table-striped table-condensed')
+                            .append($('<tbody>')
+                                .append(rows_reportdestkop))))
+            }
+
             // SfB block
             if (rows_sfb !== ''){
                 $('#ms_office-tab')
@@ -349,7 +376,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_sfb))))
             }
-            
+
             // Edge block
             if (rows_edge !== ''){
                 $('#ms_office-tab')
@@ -363,7 +390,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_edge))))
             }
-            
+
             // Teams block
             if (rows_teams !== ''){
                 $('#ms_office-tab')
@@ -377,7 +404,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_teams))))
             }
-            
+
             // Company Portal block
             if (rows_company_portal !== ''){
                 $('#ms_office-tab')
@@ -391,7 +418,7 @@ $(document).on('appReady', function(){
                             .append($('<tbody>')
                                 .append(rows_company_poral))))
             }
-            
+
             // ATP Defender block
             if (rows_defender !== ''){
                 $('#ms_office-tab')
@@ -418,6 +445,20 @@ $(document).on('appReady', function(){
                             .addClass('table table-striped table-condensed')
                             .append($('<tbody>')
                                 .append(rows_yammer))))
+            }
+
+            // Copilot block
+            if (rows_copilot !== ''){
+                $('#ms_office-tab')
+                    .append($('<h4>')
+                        .append($('<i>')
+                            .addClass('fa fa-plane'))
+                        .append(' Copilot'))
+                    .append($('<div style="max-width:350px;">')
+                        .append($('<table>')
+                            .addClass('table table-striped table-condensed')
+                            .append($('<tbody>')
+                                .append(rows_copilot))))
             }
         })
     });
